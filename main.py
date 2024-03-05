@@ -34,7 +34,7 @@ class Ui_MainWindow(object):
         self.label_5.setGeometry(QtCore.QRect(10, 310, 81, 16))
         self.label_5.setObjectName("label_5")
         self.comboBox_2 = QtWidgets.QComboBox(parent=self.centralwidget)
-        self.comboBox_2.setGeometry(QtCore.QRect(10, 190, 73, 22))
+        self.comboBox_2.setGeometry(QtCore.QRect(10, 190, 191, 22))
         self.comboBox_2.setEditable(False)
         self.comboBox_2.setObjectName("comboBox_2")
         self.comboBox_2.addItem("")
@@ -48,7 +48,7 @@ class Ui_MainWindow(object):
         self.comboBox_2.addItem("")
         self.comboBox_2.addItem("")
         self.comboBox_3 = QtWidgets.QComboBox(parent=self.centralwidget)
-        self.comboBox_3.setGeometry(QtCore.QRect(10, 260, 73, 22))
+        self.comboBox_3.setGeometry(QtCore.QRect(10, 260, 191, 22))
         self.comboBox_3.setObjectName("comboBox_3")
         self.comboBox_3.addItem("")
         self.comboBox_3.addItem("")
@@ -68,16 +68,18 @@ class Ui_MainWindow(object):
         self.comboBox_3.addItem("")
         self.comboBox_3.addItem("")
         self.horizontalSlider = QtWidgets.QSlider(parent=self.centralwidget)
-        self.horizontalSlider.setGeometry(QtCore.QRect(10, 330, 160, 22))
+        self.horizontalSlider.setGeometry(QtCore.QRect(10, 330, 191, 22))
         self.horizontalSlider.setLayoutDirection(QtCore.Qt.LayoutDirection.LeftToRight)
         self.horizontalSlider.setAutoFillBackground(False)
         self.horizontalSlider.setMinimum(16)
         self.horizontalSlider.setMaximum(55)
         self.horizontalSlider.setProperty("value", 55)
         self.horizontalSlider.setOrientation(QtCore.Qt.Orientation.Horizontal)
+        self.horizontalSlider.setInvertedAppearance(False)
+        self.horizontalSlider.setInvertedControls(False)
         self.horizontalSlider.setObjectName("horizontalSlider")
         self.comboBox_4 = QtWidgets.QComboBox(parent=self.centralwidget)
-        self.comboBox_4.setGeometry(QtCore.QRect(10, 120, 73, 22))
+        self.comboBox_4.setGeometry(QtCore.QRect(10, 120, 191, 22))
         self.comboBox_4.setEditable(False)
         self.comboBox_4.setObjectName("comboBox_4")
         MainWindow.setCentralWidget(self.centralwidget)
@@ -134,7 +136,6 @@ class Ui_MainWindow(object):
         self.comboBox_3.setItemText(16, _translate("MainWindow", "Poacher"))
 
         #COMBINE COMBO BOXES TO MATCH EACH OTHER -> EACH POS 2 PLAYESTYLES
-        #MAKE BOXES MUCH WIDER SO WORDS DON'T CUT OUT
         #HAVE MAX LABEL SLIDER SHOW THE CURRENT VALUE
         #POPULATE TEAM DROPDOWN MENU USING DATABASE, READ DATABASE, CREATE LIST OF TEAM, ADD TO DROPDOWN
 
