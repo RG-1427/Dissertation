@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="648c358f-de36-42f4-8f9f-f89cb92df6e2" name="Changes" comment="Adjustments">
+    <list default="true" id="648c358f-de36-42f4-8f9f-f89cb92df6e2" name="Changes" comment="Database setup">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/2021-2022 Football Player Stats.csv" beforeDir="false" afterPath="$PROJECT_DIR$/2021-2022 Football Player Stats.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/2022-2023 Football Player Stats.csv" beforeDir="false" afterPath="$PROJECT_DIR$/2022-2023 Football Player Stats.csv" afterDir="false" />
@@ -24,12 +24,12 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="UPDATE_TYPE" value="REBASE" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "RG-1427"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;RG-1427&quot;
   }
-}]]></component>
+}</component>
   <component name="GithubPullRequestsUISettings">
     <option name="selectedUrlAndAccountId">
       <UrlAndAccount>
@@ -141,8 +141,19 @@
       <option name="project" value="LOCAL" />
       <updated>1709650985581</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Database setup">
+      <option name="closed" value="true" />
+      <created>1709657481381</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1709657481381</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="*.csv" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -162,6 +173,7 @@
     <MESSAGE value="Dashboard setup" />
     <MESSAGE value="Box sizing fix" />
     <MESSAGE value="Adjustments" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adjustments" />
+    <MESSAGE value="Database setup" />
+    <option name="LAST_COMMIT_MESSAGE" value="Database setup" />
   </component>
 </project>

@@ -18,9 +18,6 @@ class Ui_MainWindow(object):
         self.submitButton = QtWidgets.QPushButton(parent=self.centralwidget)
         self.submitButton.setGeometry(QtCore.QRect(10, 370, 93, 28))
         self.submitButton.setObjectName("submitButton")
-        self.textEdit = QtWidgets.QTextEdit(parent=self.centralwidget)
-        self.textEdit.setGeometry(QtCore.QRect(10, 10, 321, 61))
-        self.textEdit.setObjectName("textEdit")
         self.label = QtWidgets.QLabel(parent=self.centralwidget)
         self.label.setGeometry(QtCore.QRect(10, 100, 55, 16))
         self.label.setObjectName("label")
@@ -28,21 +25,15 @@ class Ui_MainWindow(object):
         self.label_2.setGeometry(QtCore.QRect(10, 170, 55, 16))
         self.label_2.setObjectName("label_2")
         self.label_3 = QtWidgets.QLabel(parent=self.centralwidget)
-        self.label_3.setGeometry(QtCore.QRect(10, 240, 55, 16))
+        self.label_3.setGeometry(QtCore.QRect(10, 240, 75, 16))
         self.label_3.setObjectName("label_3")
         self.label_5 = QtWidgets.QLabel(parent=self.centralwidget)
-        self.label_5.setGeometry(QtCore.QRect(10, 310, 81, 16))
+        self.label_5.setGeometry(QtCore.QRect(10, 310, 100, 16))
         self.label_5.setObjectName("label_5")
         self.comboBox_2 = QtWidgets.QComboBox(parent=self.centralwidget)
         self.comboBox_2.setGeometry(QtCore.QRect(10, 190, 191, 22))
         self.comboBox_2.setEditable(False)
         self.comboBox_2.setObjectName("comboBox_2")
-        self.comboBox_2.addItem("")
-        self.comboBox_2.addItem("")
-        self.comboBox_2.addItem("")
-        self.comboBox_2.addItem("")
-        self.comboBox_2.addItem("")
-        self.comboBox_2.addItem("")
         self.comboBox_2.addItem("")
         self.comboBox_2.addItem("")
         self.comboBox_2.addItem("")
@@ -82,6 +73,14 @@ class Ui_MainWindow(object):
         self.comboBox_4.setGeometry(QtCore.QRect(10, 120, 191, 22))
         self.comboBox_4.setEditable(False)
         self.comboBox_4.setObjectName("comboBox_4")
+        self.label_4 = QtWidgets.QLabel(parent=self.centralwidget)
+        self.label_4.setGeometry(QtCore.QRect(70, 10, 211, 61))
+        font = QtGui.QFont()
+        font.setPointSize(16)
+        self.label_4.setFont(font)
+        self.label_4.setScaledContents(False)
+        self.label_4.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.label_4.setObjectName("label_4")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(parent=MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 353, 26))
@@ -94,27 +93,31 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
+        self.horizontalSlider.valueChanged.connect(self.updateMaxLabel)
+        self.comboBox_2.currentIndexChanged.connect(self.checkCombination)
+        self.checkCombination(0)
+        initial_slider_value = self.horizontalSlider.value()
+        self.updateMaxLabel(initial_slider_value)
+        self.comboBox_4.addItems(teamsList)
+
+    def updateMaxLabel(self, value):
+        self.label_5.setText(f"Maximum Age: {value}")
+
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.submitButton.setText(_translate("MainWindow", "Submit"))
-        self.textEdit.setHtml(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:7.8pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:22pt;\">Player Parameters</span></p></body></html>"))
         self.label.setText(_translate("MainWindow", "Team"))
         self.label_2.setText(_translate("MainWindow", "Position"))
-        self.label_3.setText(_translate("MainWindow", "Playstyle"))
-        self.label_5.setText(_translate("MainWindow", "Maximum Age"))
+        self.label_3.setText(_translate("MainWindow", "Playing Style"))
         self.comboBox_2.setItemText(0, _translate("MainWindow", "GK"))
         self.comboBox_2.setItemText(1, _translate("MainWindow", "DF"))
         self.comboBox_2.setItemText(2, _translate("MainWindow", "MF"))
         self.comboBox_2.setItemText(3, _translate("MainWindow", "FW"))
         self.comboBox_3.setItemText(0, _translate("MainWindow", "Sweeper"))
         self.comboBox_3.setItemText(1, _translate("MainWindow", "Shot Stopper"))
-        self.comboBox_3.setItemText(2, _translate("MainWindow", "Centre Defender"))
-        self.comboBox_3.setItemText(3, _translate("MainWindow", "Ball Playing"))
+        self.comboBox_3.setItemText(2, _translate("MainWindow", "Ball Playing"))
+        self.comboBox_3.setItemText(3, _translate("MainWindow", "Central Defender"))
         self.comboBox_3.setItemText(4, _translate("MainWindow", "Fullback"))
         self.comboBox_3.setItemText(5, _translate("MainWindow", "Wingback"))
         self.comboBox_3.setItemText(6, _translate("MainWindow", "Deep Lying Playmaker"))
@@ -127,14 +130,48 @@ class Ui_MainWindow(object):
         self.comboBox_3.setItemText(13, _translate("MainWindow", "Wide Forward"))
         self.comboBox_3.setItemText(14, _translate("MainWindow", "Target"))
         self.comboBox_3.setItemText(15, _translate("MainWindow", "Poacher"))
+        self.label_4.setText(_translate("MainWindow", "Player Parameters"))
 
-        #COMBINE COMBO BOXES TO MATCH EACH OTHER -> EACH POS 2 PLAYESTYLES
-        #HAVE MAX LABEL SLIDER SHOW THE CURRENT VALUE
-        #POPULATE TEAM DROPDOWN MENU USING DATABASE, READ DATABASE, CREATE LIST OF TEAM, ADD TO DROPDOWN
+    def checkCombination(self, index: int):
+        allowed_combinations = {
+            "GK": ["Sweeper", "Shot Stopper"],
+            "DF": ["Central Defender", "Fullback", "Wingback"],
+            "MF": ["Deep Lying Playmaker", "Anchor", "Box to Box", "Playmaker", "Advanced Playmaker"],
+            "FW": ["Shadow Striker", "Inside Forward", "Wide Forward", "Target", "Poacher"]
+        }
+        selected_position = self.comboBox_2.currentText()
+        current_index = self.comboBox_3.currentIndex()
+        self.comboBox_3.clear()
+        self.comboBox_3.addItems(allowed_combinations[selected_position])
+        self.comboBox_3.setCurrentIndex(current_index)
 
+def clean(df):
+    missing_data = df.isnull().sum()
+    print("Columns with missing data in the first database:")
+    print(missing_data[missing_data > 0])
+    print("\nRows with missing data:")
+    rows_with_missing_data = df[df.isnull().any(axis=1)]
+    print(rows_with_missing_data)
 
 if __name__ == "__main__":
     import sys
+    import pandas as pd
+
+    df1 = pd.read_csv('2021-2022 Football Player Stats.csv', encoding='latin1')
+    df2 = pd.read_csv('2022-2023 Football Player Stats.csv', encoding='latin1')
+
+    teamsList = []
+    for i in range(len(df1)):
+        curTeam = df1.loc[i, 'Squad']
+        if(teamsList.__contains__(curTeam) == False):
+            teamsList.append(curTeam)
+    teamsList = sorted(teamsList)
+
+    clean(df1)
+    clean(df2)
+
+    #STANDARDIZE DATA? SEE IF ANY IS IN DIFFERENT FORMAT? -> % to NUMS
+    #REMOVE UNNECESSARY COLUMNS
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
     ui = Ui_MainWindow()
