@@ -38,10 +38,12 @@ class Ui_MainWindow(object):
         self.comboBox_2.addItem("")
         self.comboBox_2.addItem("")
         self.comboBox_2.addItem("")
+        self.comboBox_2.addItem("")
+        self.comboBox_2.addItem("")
+        self.comboBox_2.addItem("")
         self.comboBox_3 = QtWidgets.QComboBox(parent=self.centralwidget)
         self.comboBox_3.setGeometry(QtCore.QRect(10, 260, 191, 22))
         self.comboBox_3.setObjectName("comboBox_3")
-        self.comboBox_3.addItem("")
         self.comboBox_3.addItem("")
         self.comboBox_3.addItem("")
         self.comboBox_3.addItem("")
@@ -63,8 +65,8 @@ class Ui_MainWindow(object):
         self.horizontalSlider.setLayoutDirection(QtCore.Qt.LayoutDirection.LeftToRight)
         self.horizontalSlider.setAutoFillBackground(False)
         self.horizontalSlider.setMinimum(16)
-        self.horizontalSlider.setMaximum(55)
-        self.horizontalSlider.setProperty("value", 55)
+        self.horizontalSlider.setMaximum(56)
+        self.horizontalSlider.setProperty("value", 56)
         self.horizontalSlider.setOrientation(QtCore.Qt.Orientation.Horizontal)
         self.horizontalSlider.setInvertedAppearance(False)
         self.horizontalSlider.setInvertedControls(False)
@@ -110,34 +112,38 @@ class Ui_MainWindow(object):
         self.label.setText(_translate("MainWindow", "Team"))
         self.label_2.setText(_translate("MainWindow", "Position"))
         self.label_3.setText(_translate("MainWindow", "Playing Style"))
-        self.comboBox_2.setItemText(0, _translate("MainWindow", "GK"))
-        self.comboBox_2.setItemText(1, _translate("MainWindow", "DF"))
-        self.comboBox_2.setItemText(2, _translate("MainWindow", "MF"))
-        self.comboBox_2.setItemText(3, _translate("MainWindow", "FW"))
-        self.comboBox_3.setItemText(0, _translate("MainWindow", "Sweeper"))
-        self.comboBox_3.setItemText(1, _translate("MainWindow", "Shot Stopper"))
-        self.comboBox_3.setItemText(2, _translate("MainWindow", "Ball Playing"))
-        self.comboBox_3.setItemText(3, _translate("MainWindow", "Central Defender"))
-        self.comboBox_3.setItemText(4, _translate("MainWindow", "Fullback"))
-        self.comboBox_3.setItemText(5, _translate("MainWindow", "Wingback"))
-        self.comboBox_3.setItemText(6, _translate("MainWindow", "Deep Lying Playmaker"))
-        self.comboBox_3.setItemText(7, _translate("MainWindow", "Anchor"))
-        self.comboBox_3.setItemText(8, _translate("MainWindow", "Box to Box"))
-        self.comboBox_3.setItemText(9, _translate("MainWindow", "Playmaker"))
-        self.comboBox_3.setItemText(10, _translate("MainWindow", "Advanced Playmaker"))
-        self.comboBox_3.setItemText(11, _translate("MainWindow", "Shadow Striker"))
-        self.comboBox_3.setItemText(12, _translate("MainWindow", "Inside Forward"))
-        self.comboBox_3.setItemText(13, _translate("MainWindow", "Wide Forward"))
-        self.comboBox_3.setItemText(14, _translate("MainWindow", "Target"))
-        self.comboBox_3.setItemText(15, _translate("MainWindow", "Poacher"))
+        self.comboBox_2.setItemText(0, _translate("MainWindow", "CB"))
+        self.comboBox_2.setItemText(1, _translate("MainWindow", "LB/RB"))
+        self.comboBox_2.setItemText(2, _translate("MainWindow", "CDM"))
+        self.comboBox_2.setItemText(3, _translate("MainWindow", "CM"))
+        self.comboBox_2.setItemText(4, _translate("MainWindow", "CAM/CF"))
+        self.comboBox_2.setItemText(5, _translate("MainWindow", "LW/RW"))
+        self.comboBox_2.setItemText(6, _translate("MainWindow", "ST"))
+        self.comboBox_3.setItemText(0, _translate("MainWindow", "Ball Playing"))
+        self.comboBox_3.setItemText(1, _translate("MainWindow", "Central Defender"))
+        self.comboBox_3.setItemText(2, _translate("MainWindow", "Fullback"))
+        self.comboBox_3.setItemText(3, _translate("MainWindow", "Wingback"))
+        self.comboBox_3.setItemText(4, _translate("MainWindow", "Deep Lying Playmaker"))
+        self.comboBox_3.setItemText(5, _translate("MainWindow", "Anchor"))
+        self.comboBox_3.setItemText(6, _translate("MainWindow", "Box to Box"))
+        self.comboBox_3.setItemText(7, _translate("MainWindow", "Playmaker"))
+        self.comboBox_3.setItemText(8, _translate("MainWindow", "Advanced Playmaker"))
+        self.comboBox_3.setItemText(9, _translate("MainWindow", "Shadow Striker"))
+        self.comboBox_3.setItemText(10, _translate("MainWindow", "Inside Forward"))
+        self.comboBox_3.setItemText(11, _translate("MainWindow", "Wide Forward"))
+        self.comboBox_3.setItemText(12, _translate("MainWindow", "Target"))
+        self.comboBox_3.setItemText(13, _translate("MainWindow", "Poacher"))
         self.label_4.setText(_translate("MainWindow", "Player Parameters"))
 
     def checkCombination(self, index: int):
         allowed_combinations = {
-            "GK": ["Sweeper", "Shot Stopper"],
-            "DF": ["Central Defender", "Fullback", "Wingback"],
-            "MF": ["Deep Lying Playmaker", "Anchor", "Box to Box", "Playmaker", "Advanced Playmaker"],
-            "FW": ["Shadow Striker", "Inside Forward", "Wide Forward", "Target", "Poacher"]
+            "CB": ["Central Defender", "Ball Playing"],
+            "LB/RB": ["Fullback", "Wingback"],
+            "CDM": ["Deep Lying Playmaker", "Anchor"],
+            "CM": ["Box to Box", "Playmaker"],
+            "CAM/CF": ["Advanced Playmaker", "Shadow Striker"],
+            "LW/RW": ["Inside Forward", "Wide Forward"],
+            "ST": ["Target", "Poacher"]
         }
         selected_position = self.comboBox_2.currentText()
         current_index = self.comboBox_3.currentIndex()
@@ -145,13 +151,44 @@ class Ui_MainWindow(object):
         self.comboBox_3.addItems(allowed_combinations[selected_position])
         self.comboBox_3.setCurrentIndex(current_index)
 
-def clean(df):
+    #SUBMISION -> REMOVE CORRECT COLUMNS FROM DATAFRAMES, REMOVE PLAYERS DEPENDING ON AGE LIMIT.
+    #RUN KNN MODEL, SEND TOP 5, TEST 25-50 TIMES PER POS?
+    #RUN SECOND MODEL TO PREDICT DATA (AFTER TESTING SECOND MODEL WITH 50 - 100 TRANSFERS)
+
+def handling_missing_data(df):
     missing_data = df.isnull().sum()
     print("Columns with missing data in the first database:")
     print(missing_data[missing_data > 0])
     print("\nRows with missing data:")
     rows_with_missing_data = df[df.isnull().any(axis=1)]
     print(rows_with_missing_data)
+
+def preprocessing(df, name):
+    handling_missing_data(df)
+
+    columns = ["Player", "Pos", "Squad", "Age", "Min", "Goals", "SoT%", "G/Sh", "ShoDist",
+    "PasTotCmp%", "PasShoCmp%", "PasMedCmp%", "PasLonCmp%", "Assists", "PasAss", "Pas3rd", "PPA", "CrsPA",
+    "PasCrs", "TI", "SCA", "GCA", "Tkl", "TklWon", "TklDri%", "Blocks", "Int", "Clr",
+    "Err", "Touches", "TouAtt3rd", "TouAttPen", "CPA", "Crs", "PKwon",
+    "PKcon", "Recov", "AerWon%"]
+    non_converted = ['Player', 'Pos', 'Squad', 'Age', 'Min', "G/Sh", "ShoDist"]
+    df = df[columns]
+    df = df[(df['Pos'] != 'GK') & (df['Min'] >= 450)]
+    for col in columns:
+        if col not in non_converted and '%' not in col:
+            df[col] = df[col] / df['Min']
+            mean = df[col].mean()
+            std = df[col].std()
+            df[col] = (df[col] - mean) / std
+        elif '%' in col:
+            df[col] = df[col] / 100
+        elif col == "G/Sh" or col == "ShoDist":
+            mean = df[col].mean()
+            std = df[col].std()
+            df[col] = (df[col] - mean) / std
+    df.reset_index(drop=True, inplace=True)
+    name = "Preprocessed " + name + ".csv"
+    df.to_csv(name, index=False, encoding='latin1')
 
 if __name__ == "__main__":
     import sys
@@ -167,11 +204,9 @@ if __name__ == "__main__":
             teamsList.append(curTeam)
     teamsList = sorted(teamsList)
 
-    clean(df1)
-    clean(df2)
+    preprocessing(df1, "2021-2022 Football Player Stats.csv")
+    preprocessing(df2, "2022-2023 Football Player Stats.csv")
 
-    #STANDARDIZE DATA? SEE IF ANY IS IN DIFFERENT FORMAT? -> % to NUMS
-    #REMOVE UNNECESSARY COLUMNS
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
     ui = Ui_MainWindow()
