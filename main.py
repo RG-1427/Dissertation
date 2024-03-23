@@ -176,7 +176,7 @@ def preprocessing(df, name):
     df = df[(df['Pos'] != 'GK') & (df['Min'] >= 450)]
     for col in columns:
         if col not in non_converted and '%' not in col:
-            df[col] = df[col] / df['Min']
+            df[col] = df[col] / df['Min'] * 90
             mean = df[col].mean()
             std = df[col].std()
             df[col] = (df[col] - mean) / std
