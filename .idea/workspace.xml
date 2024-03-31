@@ -4,9 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="648c358f-de36-42f4-8f9f-f89cb92df6e2" name="Changes" comment="Database preprocessing finish, ready for model development">
+    <list default="true" id="648c358f-de36-42f4-8f9f-f89cb92df6e2" name="Changes" comment="setup for kmeans model">
       <change beforePath="$PROJECT_DIR$/.idea/csv-editor.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/csv-editor.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Preprocessed 2021-2022 Football Player Stats.csv.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Preprocessed 2021-2022 Football Player Stats.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Preprocessed 2022-2023 Football Player Stats.csv.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Preprocessed 2022-2023 Football Player Stats.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -64,7 +66,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-python-sdk-d68999036c7f-d3b881c8e49f-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-233.14475.56" />
+        <option value="bundled-python-sdk-09665e90c3a7-d3b881c8e49f-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-233.15026.15" />
       </set>
     </attachedChunks>
   </component>
@@ -173,7 +175,15 @@
       <option name="project" value="LOCAL" />
       <updated>1711205030651</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="setup for kmeans model">
+      <option name="closed" value="true" />
+      <created>1711664600436</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1711664600436</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -200,6 +210,7 @@
     <MESSAGE value="Database setup" />
     <MESSAGE value="Database cleaning start, Dashboard finish" />
     <MESSAGE value="Database preprocessing finish, ready for model development" />
-    <option name="LAST_COMMIT_MESSAGE" value="Database preprocessing finish, ready for model development" />
+    <MESSAGE value="setup for kmeans model" />
+    <option name="LAST_COMMIT_MESSAGE" value="setup for kmeans model" />
   </component>
 </project>

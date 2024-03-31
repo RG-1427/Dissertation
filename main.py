@@ -1,5 +1,11 @@
 from PyQt6 import QtCore, QtGui, QtWidgets
+from sklearn.decomposition import PCA
 from sklearn.cluster import KMeans
+from sklearn.metrics import silhouette_score
+from sklearn.model_selection import train_test_split
+from keras.models import Sequential
+from tensorflow.keras.layers import Dense
+import numpy as np
 
 
 class Ui_MainWindow(object):
@@ -94,7 +100,7 @@ class Ui_MainWindow(object):
         self.checkCombination(0)
         initial_slider_value = self.horizontalSlider.value()
         self.updateMaxLabel(initial_slider_value)
-        self.comboBox_4.addItems(teamsList)
+        self.comboBox_4.addItems(teamList)
 
     def updateMaxLabel(self, value):
         self.label_5.setText(f"Maximum Age: {value}")
@@ -149,42 +155,67 @@ class Ui_MainWindow(object):
         max_age = self.horizontalSlider.value()
         selected_position = self.comboBox_2.currentText()
         selected_playstyle = self.comboBox_3.currentText()
-        defender = ["Player", "Pos", "Squad", "Goals", "SoT%", "G/Sh", "ShoDist",
-                   "PasTotCmp%", "PasShoCmp%", "PasMedCmp%", "PasLonCmp%", "Assists", "PasAss",
-                   "CrsPA", "PasCrs", "TI", "SCA", "GCA", "Tkl", "TklWon", "TklDri%", "Blocks", "Int", "Clr",
-                   "Err", "Crs", "PKcon", "Recov", "AerWon%"]
-        midfielder = ["Player", "Pos", "Squad", "Goals", "SoT%", "G/Sh", "ShoDist",
-              "PasTotCmp%", "PasShoCmp%", "PasMedCmp%", "PasLonCmp%", "Assists", "PasAss", "Pas3rd", "PPA",
-              "CrsPA", "PasCrs", "SCA", "GCA", "Tkl", "TklWon", "TklDri%", "Blocks", "Int",
-              "Err", "Touches", "TouAtt3rd", "TouAttPen", "CPA", "Crs", "PKwon", "PKcon", "Recov"]
-        forward = ["Player", "Pos", "Squad", "Goals", "SoT%", "G/Sh", "ShoDist",
-              "PasTotCmp%", "PasShoCmp%", "PasMedCmp%", "PasLonCmp%", "Assists", "PasAss", "Pas3rd", "PPA",
-              "CrsPA", "PasCrs", "SCA", "GCA", "Touches", "TouAtt3rd", "TouAttPen", "CPA", "Crs", "PKwon"]
-        df = pd.read_csv("Preprocessed 2021-2022 Football Player Stats.csv.csv")
+        defender = ["Player", "Pos", "Squad", "Goals", "SoT%", "PasTotCmp%", "Assists",
+            "TI", "SCA", "GCA", "Blocks", "Int", "Clr", "Crs", "AerWon%"]
+        midfielder = ["Player", "Pos", "Squad", "Goals", "SoT%", "ShoDist", "PasTotCmp%",
+            "PasShoCmp%", "PasLonCmp%", "Assists", "PasAss", "SCA", "GCA", "TklWon", "CPA"]
+        forward = ["Player", "Pos", "Squad", "Goals", "SoT%", "G/Sh", "ShoDist", "PasTotCmp%",
+            "Assists", "PasAss", "SCA", "GCA", "TouAttPen", "CPA", "Crs"]
+        df = pd.read_csv("Preprocessed 2021-2022 Football Player Stats.csv", encoding='latin1')
+
         if(selected_position == "CB" or selected_position == "LB/RB"):
-            filtered_df = df[(df['Age'] <= max_age) & (df['Position'] == "DF")]
-            X = filtered_df[defender]
+            filtered_df = df[(df['Age'] <= max_age) & df['Pos'].str.contains("DF")]
+            x = filtered_df[defender]
         elif(selected_position == "ST" or selected_position == "LW/RW"):
-            filtered_df = df[(df['Age'] <= max_age) & (df['Position'] == "FW")]
-            X = filtered_df[forward]
+            filtered_df = df[(df['Age'] <= max_age) & df['Pos'].str.contains("FW")]
+            x = filtered_df[forward]
         else:
-            filtered_df = df[(df['Age'] <= max_age) & (df['Position'] == "MF")]
-            X = filtered_df[midfielder]
+            filtered_df = df[(df['Age'] <= max_age) & (df['Pos'].str.contains("MF"))]
+            x = filtered_df[midfielder]
 
-        #FIX?
         if selected_position in ["CDM", "CM", "CAM/CF"]:
-            kmeans = KMeans(n_clusters=6, random_state=1)
+            kmeans = KMeans(n_clusters=6, random_state=42)
         else:
-            kmeans = KMeans(n_clusters=4, random_state=1)
-        kmeans.fit(X)
+            kmeans = KMeans(n_clusters=4, random_state=42)
 
-        #MATCH EACH CLUSTER TO PLAYING STYLE
-        cluster_centers = kmeans.cluster_centers_
+        player_info = x[['Player', 'Pos', 'Squad']]
+        x = x.drop(['Player', 'Pos', 'Squad'], axis=1)
+        pca = PCA(n_components=2)
+        x = pca.fit_transform(x)
+        kmeans.fit(x)
         df['Cluster'] = kmeans.labels_
         cluster_stats = df.groupby('Cluster').mean()
         print(cluster_stats)
-        #prsent on pyQT -> Open new small window with ui: Top 5 player 1. Name Team Age ...
-        #ACCURACY MEASUREMENT FOR kNN
+
+        #DF -> cluster 1: cluster 2: cluster 3: cluster 4:
+        #MF -> cluster 1: cluster 2: cluster 3: cluster 4: cluster 5: cluster 6:
+        #FW -> cluster 1: cluster 2: cluster 3: cluster 4:
+
+        #clustered_data = pd.concat([pd.DataFrame(kmeans.labels_, columns=['Cluster']), player_info], axis=1)
+        #CLUSTER NUMBER BASED ON PLAY STYLES
+        #desired_cluster = 0  # Change this to the cluster number you want to analyze
+
+        # Filter the DataFrame for the desired cluster
+        #cluster_df = clustered_data[clustered_data['Cluster'] == desired_cluster]
+
+        # CRITERIA BASED ON PLAY STYLES -> EACH HAS ITS OWN CRITERIA
+        #criteria = ['Goals', 'Assists']  # Add more criteria if needed
+
+        # Sort the players within the cluster based on the criteria
+        #sorted_cluster_df = cluster_df.sort_values(by=criteria, ascending=False)
+
+        # Pick the top 5 players based on the criteria
+        #top_players = sorted_cluster_df.head(5)
+
+        #print(top_players)
+        #msgBox = QtWidgets.QMessageBox
+        #prsent on pyQT -> Open new small window with ui: Top 5 player 1. Name Team Age
+        #SETUP TEXT
+        #msgBox.setText("Submit successful!")
+        #msgBox.setStandardButtons(QtWidgets.QMessageBox.OK)
+        #msgBox.exec_()
+        silhouette = silhouette_score(x, kmeans.labels_)
+        print("Silhouette Score:", silhouette)
         team = self.comboBox_4.currentText()
         #CALL SECOND MODEL AT THE END... SO CAN TEST OVERALL
 
@@ -213,7 +244,7 @@ def preprocessing(df, name):
     "PKcon", "Recov", "AerWon%"]
     non_converted = ['Player', 'Pos', 'Squad', 'Age', 'Min', "G/Sh", "ShoDist"]
     df = df[columns]
-    df = df[(df['Pos'] != 'GK') & (df['Min'] >= 450)]
+    df = df[(df['Pos'] != 'GK') & (df['Min'] >= 450) & df['Squad'].isin(teamList)]
     for col in columns:
         if col not in non_converted and '%' not in col:
             df[col] = df[col] / df['Min'] * 90
@@ -226,9 +257,41 @@ def preprocessing(df, name):
             mean = df[col].mean()
             std = df[col].std()
             df[col] = (df[col] - mean) / std
+    df['Rankings'] = df['Squad'].map(dict(zip(teamList, rankings)))
+    df = df[columns + ['Rankings']]
     df.reset_index(drop=True, inplace=True)
-    name = "Preprocessed " + name + ".csv"
+    name = "Preprocessed " + name
     df.to_csv(name, index=False, encoding='latin1')
+
+def mlp():
+    #ADD TESTING AND RANK DATA TO TOP -> FIND TRASFERED PLAYERS IN MY DATABASE AS TESTING, ADD THOSE ROWS ONLY
+    df = pd.read_csv("Preprocessed 2021-2022 Football Player Stats.csv", encoding='latin1')
+    #REPLACE WITH TRAINING DATA -> SPECIFIC PLAYERS THAT HAVE TRANSFERED
+    #THIS MEANS USE REAL TEAM RANKINGS AS RANKS ARRAY, THEN TEST DATA IS ADDED AT THE END -> RANKS OF TEAMS THEY WENT TO IN 2021
+
+    X = df.iloc[:, 5:].values
+    X = np.concatenate((X, df['Rankings'].values.reshape(-1, 1)),
+                       axis=1)
+    y = np.random.randint(1, 120, size=X.shape[0])
+
+    #TEST SPLIT -> MAKE LATEST 5 PLAYERS BE TEST
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+    model = Sequential([
+        Dense(32, activation='relu'),
+        Dense(16, activation='relu'),
+        Dense(1)
+    ])
+
+    model.compile(optimizer='adam', loss='mean_squared_error')
+
+    model.fit(X_train, y_train, epochs=50, batch_size=32)
+
+    mse = model.evaluate(X_test, y_test)
+    print("Mean Squared Error:", mse)
+
+    predictions = model.predict(X_test)
+    print("Predictions:", predictions)
 
 if __name__ == "__main__":
     import sys
@@ -237,15 +300,71 @@ if __name__ == "__main__":
     df1 = pd.read_csv('2021-2022 Football Player Stats.csv', encoding='latin1')
     df2 = pd.read_csv('2022-2023 Football Player Stats.csv', encoding='latin1')
 
-    teamsList = []
-    for i in range(len(df1)):
-        curTeam = df1.loc[i, 'Squad']
-        if(teamsList.__contains__(curTeam) == False):
-            teamsList.append(curTeam)
-    teamsList = sorted(teamsList)
+    uefa_rankings = {
+        'Arsenal': 17,
+        'Atalanta': 24,
+        'Athletic Club': 86,
+        'Atlético Madrid': 9,
+        'Barcelona': 6,
+        'Bayern Munich': 1,
+        'Betis': 78,
+        'Bordeaux': 119,
+        'Burnley': 76,
+        'Chelsea': 5,
+        'Dortmund': 19,
+        'Eint Frankfurt': 26,
+        'Espanyol': 85,
+        'Everton': 77,
+        'Freiburg': 103,
+        'Getafe': 84,
+        'Granada': 83,
+        'Hertha BSC': 101,
+        'Hoffenheim': 71,
+        'Inter': 23,
+        'Juventus': 8,
+        'Köln': 101,
+        'Lazio': 31,
+        'Leicester City': 69,
+        'Leverkusen': 30,
+        'Lille': 56,
+        'Liverpool': 2,
+        'Lyon': 20,
+        "M'Gladbach": 79,
+        'Manchester City': 3,
+        'Manchester Utd': 10,
+        'Marseille': 38,
+        'Milan': 45,
+        'Monaco': 61,
+        'Napoli': 25,
+        'Nice': 115,
+        'Paris S-G': 7,
+        'RB Leipzig': 13,
+        'Real Madrid': 4,
+        'Real Sociedad': 62,
+        'Reims': 116,
+        'Rennes': 49,
+        'Roma': 11,
+        'Saint-Étienne': 118,
+        'Sevilla': 12,
+        'Strasbourg': 98,
+        'Torino': 99,
+        'Tottenham': 14,
+        'Union Berlin': 100,
+        'Valencia': 43,
+        'Villarreal': 18,
+        'West Ham': 74,
+        'Wolfsburg': 73,
+        'Wolves': 75
+    }
+
+    teamList = list(uefa_rankings.keys())
+    rankings = list(uefa_rankings.values())
+
 
     preprocessing(df1, "2021-2022 Football Player Stats.csv")
     preprocessing(df2, "2022-2023 Football Player Stats.csv")
+
+    mlp()
 
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
