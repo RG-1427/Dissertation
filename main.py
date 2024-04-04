@@ -216,15 +216,14 @@ class Ui_MainWindow(object):
         #msgBox.exec_()
         silhouette = silhouette_score(x, kmeans.labels_)
         print("Silhouette Score:", silhouette)
+
         team = self.comboBox_4.currentText()
+        #RANKS LIST = TEAM RANK FROM DICTIONARY, LIST OF FIVE "RANKS" WITH THAT NUMBER REPEATED
+        #mlp(PLAYERS INFO VARIABLE HERE, RANKS LIST HERE)
         #CALL SECOND MODEL AT THE END... SO CAN TEST OVERALL
 
-    #SUBMISION -> REMOVE CORRECT COLUMNS FROM DATAFRAMES, REMOVE PLAYERS DEPENDING ON AGE LIMIT AND POSITION
     #RUN KNN MODEL, SEND TOP 5, TEST 25-50 TIMES PER POS
     #RUN SECOND MODEL TO PREDICT DATA (AFTER TESTING SECOND MODEL WITH 50 - 100 TRANSFERS)
-    #TEST SECOND MODEL FIRST
-    #ACCURACY MEASUREMENT ON IT -> DATA IN PREP AND TESTING COMPARE TO REAL DATA
-    #CREATE DICTIONARY OF TEAM AND TEAM RANKING, SCRAPE FROM EUFA?
 
 def handling_missing_data(df):
     missing_data = df.isnull().sum()
@@ -263,19 +262,23 @@ def preprocessing(df, name):
     name = "Preprocessed " + name
     df.to_csv(name, index=False, encoding='latin1')
 
-def mlp():
-    #ADD TESTING AND RANK DATA TO TOP -> FIND TRASFERED PLAYERS IN MY DATABASE AS TESTING, ADD THOSE ROWS ONLY
-    df = pd.read_csv("Preprocessed 2021-2022 Football Player Stats.csv", encoding='latin1')
-    #REPLACE WITH TRAINING DATA -> SPECIFIC PLAYERS THAT HAVE TRANSFERED
-    #THIS MEANS USE REAL TEAM RANKINGS AS RANKS ARRAY, THEN TEST DATA IS ADDED AT THE END -> RANKS OF TEAMS THEY WENT TO IN 2021
+def mlp(testedPlayers, newRanks):
+    df1 = pd.read_csv("Preprocessed 2021-2022 Football Player Stats.csv", encoding='latin1')
+    df2 = pd.read_csv("Preprocessed 2022-2023 Football Player Stats.csv", encoding='latin1')
 
-    X = df.iloc[:, 5:].values
-    X = np.concatenate((X, df['Rankings'].values.reshape(-1, 1)),
+    common_players = set(df1['Player']).intersection(set(df2['Player']))
+    common_players_df1 = df1[df1['Player'].isin(common_players)]
+    common_players_df2 = df2[df2['Player'].isin(common_players)]
+
+    x_train = common_players_df1.iloc[:, 5:].values
+    x_train = np.concatenate((x_train, common_players_df1['Rankings'].values.reshape(-1, 1)),
                        axis=1)
-    y = np.random.randint(1, 120, size=X.shape[0])
+    y_train = common_players_df2['Rankings'].tolist()
 
-    #TEST SPLIT -> MAKE LATEST 5 PLAYERS BE TEST
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+    x_test = testedPlayers.iloc[:, 5:].values
+    x_test = np.concatenate((x_test, testedPlayers['Rankings'].values.reshape(-1, 1)), axis=1)
+
+    y_test = newRanks
 
     model = Sequential([
         Dense(32, activation='relu'),
@@ -285,12 +288,12 @@ def mlp():
 
     model.compile(optimizer='adam', loss='mean_squared_error')
 
-    model.fit(X_train, y_train, epochs=50, batch_size=32)
+    model.fit(x_train, y_train, epochs=50, batch_size=32)
 
-    mse = model.evaluate(X_test, y_test)
+    mse = model.evaluate(x_test, y_test)
     print("Mean Squared Error:", mse)
 
-    predictions = model.predict(X_test)
+    predictions = model.predict(x_test)
     print("Predictions:", predictions)
 
 if __name__ == "__main__":
@@ -360,11 +363,8 @@ if __name__ == "__main__":
     teamList = list(uefa_rankings.keys())
     rankings = list(uefa_rankings.values())
 
-
     preprocessing(df1, "2021-2022 Football Player Stats.csv")
     preprocessing(df2, "2022-2023 Football Player Stats.csv")
-
-    mlp()
 
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()

@@ -4,11 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="648c358f-de36-42f4-8f9f-f89cb92df6e2" name="Changes" comment="setup for kmeans model">
-      <change beforePath="$PROJECT_DIR$/.idea/csv-editor.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/csv-editor.xml" afterDir="false" />
+    <list default="true" id="648c358f-de36-42f4-8f9f-f89cb92df6e2" name="Changes" comment="Second model created">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Preprocessed 2021-2022 Football Player Stats.csv.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Preprocessed 2021-2022 Football Player Stats.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Preprocessed 2022-2023 Football Player Stats.csv.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Preprocessed 2022-2023 Football Player Stats.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -183,7 +180,15 @@
       <option name="project" value="LOCAL" />
       <updated>1711664600436</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Second model created">
+      <option name="closed" value="true" />
+      <created>1711847455479</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1711847455479</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -211,6 +216,7 @@
     <MESSAGE value="Database cleaning start, Dashboard finish" />
     <MESSAGE value="Database preprocessing finish, ready for model development" />
     <MESSAGE value="setup for kmeans model" />
-    <option name="LAST_COMMIT_MESSAGE" value="setup for kmeans model" />
+    <MESSAGE value="Second model created" />
+    <option name="LAST_COMMIT_MESSAGE" value="Second model created" />
   </component>
 </project>
