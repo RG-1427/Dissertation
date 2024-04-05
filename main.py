@@ -1,8 +1,7 @@
 from PyQt6 import QtCore, QtGui, QtWidgets
-from sklearn.decomposition import PCA
+from PyQt6.QtWidgets import QMessageBox
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
-from sklearn.model_selection import train_test_split
 from keras.models import Sequential
 from tensorflow.keras.layers import Dense
 import numpy as np
@@ -155,71 +154,119 @@ class Ui_MainWindow(object):
         max_age = self.horizontalSlider.value()
         selected_position = self.comboBox_2.currentText()
         selected_playstyle = self.comboBox_3.currentText()
-        defender = ["Player", "Pos", "Squad", "Goals", "SoT%", "PasTotCmp%", "Assists",
-            "TI", "SCA", "GCA", "Blocks", "Int", "Clr", "Crs", "AerWon%"]
-        midfielder = ["Player", "Pos", "Squad", "Goals", "SoT%", "ShoDist", "PasTotCmp%",
-            "PasShoCmp%", "PasLonCmp%", "Assists", "PasAss", "SCA", "GCA", "TklWon", "CPA"]
-        forward = ["Player", "Pos", "Squad", "Goals", "SoT%", "G/Sh", "ShoDist", "PasTotCmp%",
-            "Assists", "PasAss", "SCA", "GCA", "TouAttPen", "CPA", "Crs"]
+        defender = ["Player", "Pos", "Squad", "Age", "Goals", "SoT%", "PasTotCmp%", "Assists", "ShoDist",
+            "PasShoCmp%", "PasMedCmp%", "PasLonCmp%", "TI", "SCA", "GCA", "Blocks", "Int", "Clr", "Crs",
+            "PasAss", "CrsPA", "PasCrs", "Tkl", "TklWon", "TklDri%", "Err", "Recov", "PKcon", "AerWon%"]
+        midfielder = ["Player", "Pos", "Squad", "Age", "Goals", "G/Sh", "SoT%", "PasTotCmp%", "Assists", "ShoDist",
+            "PasShoCmp%", "PasMedCmp%", "PasLonCmp%", "SCA", "GCA", "Blocks", "Int",
+            "PasAss", "Pas3rd", "PPA", "Tkl", "TklWon", "TklDri%", "Recov", "PKcon", "CPA",
+            "PKwon","Touches", "TouAtt3rd", "TouAttPen", "AerWon%"]
+        forward = ["Player", "Pos", "Squad", "Age", "Goals", "G/Sh", "SoT%", "PasTotCmp%", "Assists", "ShoDist",
+            "PasShoCmp%", "PasMedCmp%", "PasLonCmp%", "SCA", "GCA",  "Pas3rd", "PPA", "Crs", "PasAss",
+            "CrsPA", "PasCrs", "PKwon", "CPA", "Touches", "TouAtt3rd", "TouAttPen", "AerWon%"]
         df = pd.read_csv("Preprocessed 2021-2022 Football Player Stats.csv", encoding='latin1')
 
         if(selected_position == "CB" or selected_position == "LB/RB"):
             filtered_df = df[(df['Age'] <= max_age) & df['Pos'].str.contains("DF")]
             x = filtered_df[defender]
+            pos = "DF"
         elif(selected_position == "ST" or selected_position == "LW/RW"):
             filtered_df = df[(df['Age'] <= max_age) & df['Pos'].str.contains("FW")]
             x = filtered_df[forward]
+            pos = "FW"
         else:
             filtered_df = df[(df['Age'] <= max_age) & (df['Pos'].str.contains("MF"))]
             x = filtered_df[midfielder]
+            pos = "MF"
 
         if selected_position in ["CDM", "CM", "CAM/CF"]:
             kmeans = KMeans(n_clusters=6, random_state=42)
         else:
             kmeans = KMeans(n_clusters=4, random_state=42)
 
-        player_info = x[['Player', 'Pos', 'Squad']]
-        x = x.drop(['Player', 'Pos', 'Squad'], axis=1)
-        pca = PCA(n_components=2)
-        x = pca.fit_transform(x)
+        player_info = x[['Player', 'Pos', 'Squad', "Age"]]
+        x = x.drop(['Player', 'Pos', 'Squad', "Age"], axis=1)
         kmeans.fit(x)
-        df['Cluster'] = kmeans.labels_
-        cluster_stats = df.groupby('Cluster').mean()
+        labels = kmeans.labels_
+        x['Cluster'] = labels
+        cluster_stats = x.groupby('Cluster').mean()
+        pd.set_option('display.max_columns', None)
         print(cluster_stats)
-
-        #DF -> cluster 1: cluster 2: cluster 3: cluster 4:
-        #MF -> cluster 1: cluster 2: cluster 3: cluster 4: cluster 5: cluster 6:
-        #FW -> cluster 1: cluster 2: cluster 3: cluster 4:
-
-        #clustered_data = pd.concat([pd.DataFrame(kmeans.labels_, columns=['Cluster']), player_info], axis=1)
-        #CLUSTER NUMBER BASED ON PLAY STYLES
-        #desired_cluster = 0  # Change this to the cluster number you want to analyze
-
-        # Filter the DataFrame for the desired cluster
-        #cluster_df = clustered_data[clustered_data['Cluster'] == desired_cluster]
-
-        # CRITERIA BASED ON PLAY STYLES -> EACH HAS ITS OWN CRITERIA
-        #criteria = ['Goals', 'Assists']  # Add more criteria if needed
-
-        # Sort the players within the cluster based on the criteria
-        #sorted_cluster_df = cluster_df.sort_values(by=criteria, ascending=False)
-
-        # Pick the top 5 players based on the criteria
-        #top_players = sorted_cluster_df.head(5)
-
-        #print(top_players)
-        #msgBox = QtWidgets.QMessageBox
-        #prsent on pyQT -> Open new small window with ui: Top 5 player 1. Name Team Age
-        #SETUP TEXT
-        #msgBox.setText("Submit successful!")
-        #msgBox.setStandardButtons(QtWidgets.QMessageBox.OK)
-        #msgBox.exec_()
         silhouette = silhouette_score(x, kmeans.labels_)
         print("Silhouette Score:", silhouette)
 
+        combined_data = pd.concat([player_info, x], axis=1)
+
+        if selected_playstyle == "Ball Playing":
+            cluster = 0
+            criteria = ["PasTotCmp%", "PasShoCmp%", "PasMedCmp%", "PasLonCmp%",
+                "Blocks", "Int", "Clr", "TklWon", "AerWon%"]
+        elif selected_playstyle == "Central Defender":
+            cluster = 3
+            criteria = ["Blocks", "Int", "Clr", "TklWon", "AerWon%",
+                "PasTotCmp%", "PasShoCmp%", "PasMedCmp%", "PasLonCmp%"]
+        elif selected_playstyle == "Fullback":
+            cluster = 2
+            criteria = ["Crs", "PasAss", "CrsPA", "PasCrs", "SCA", "GCA",
+                "Blocks", "Int", "Clr", "TklWon", "AerWon%", "TI"]
+        elif selected_playstyle == "Wingback":
+            cluster = 1
+            criteria = ["Goals", "Assists", "SCA", "GCA", "Crs", "PasAss", "CrsPA", "PasCrs", "PPA",
+                "Blocks", "Int", "Clr", "TklWon", "TI"]
+        elif selected_playstyle == "Deep Lying Playmaker":
+            cluster = 5
+            criteria = ["PasTotCmp%", "PasShoCmp%", "PasMedCmp%", "PasLonCmp%",
+                "Blocks", "Int", "Clr", "TklWon", "AerWon%"]
+        elif selected_playstyle == "Anchor":
+            cluster = 4
+            criteria = ["Blocks", "Int", "Clr", "TklWon", "AerWon%",
+                "PasTotCmp%", "PasShoCmp%", "PasMedCmp%", "PasLonCmp%"]
+        elif selected_playstyle == "Box to Box":
+            cluster = 2
+            criteria = ["Goals", "PasTotCmp%", "Assists", "PasShoCmp%", "PasMedCmp%", "PasLonCmp%",
+                "SCA", "GCA", "Blocks", "Int", "PasAss", "PPA", "Tkl", "TklWon", "TklDri%", "Recov", "CPA"]
+        elif selected_playstyle == "Playmaker":
+            cluster = 3
+            criteria = ["Goals", "PasTotCmp%", "Assists", "SCA", "GCA", "PasAss", "Pas3rd",
+                "PasShoCmp%", "PasMedCmp%", "PasLonCmp%"]
+        elif selected_playstyle == "Advanced Playmaker":
+            cluster = 0
+            criteria = ["Assists", "SCA", "GCA", "PasAss", "Pas3rd", "Goals",
+                "PasShoCmp%", "PasMedCmp%", "PasLonCmp%", "PPA", "CPA"]
+        elif selected_playstyle == "Shadow Striker":
+            cluster = 1
+            criteria = ["Goals", "SCA", "GCA", "Assists", "PasAss", "Pas3rd",
+                "PasShoCmp%", "PasMedCmp%", "PasLonCmp%", "PPA", "CPA"]
+        elif selected_playstyle == "Inside Forward":
+            cluster = 3
+            criteria = ["Goals", "Assists", "SCA", "GCA", "PPA", "CPA", "PasAss", "Pas3rd"]
+        elif selected_playstyle == "Wide Forward":
+            cluster = 1
+            criteria = ["Goals", "Assists", "SCA", "GCA", "Crs", "PasAss", "CrsPA", "PasCrs", "PPA", "TouAtt3rd"]
+        elif selected_playstyle == "Target":
+            cluster = 2
+            criteria = ["Goals", "Assists", "SCA", "GCA", "PasAss", "TouAtt3rd", "TouAttPen", "AerWon%"]
+        else:
+            cluster = 0
+            criteria = ["Goals", "G/Sh", "SoT%", "SCA", "GCA", "Assists", "PasAss", "TouAtt3rd", "TouAttPen"]
+
+        cluster_df = combined_data[combined_data['Cluster'] == cluster]
+        sorted_cluster_df = cluster_df.sort_values(by=criteria, ascending=False)
+        top_players = sorted_cluster_df.head(5)
+        top_players_info = ""
+        counter = 1
+        for index, player in top_players.iterrows():
+            top_players_info += f"{counter}. {player['Player']} {player['Squad']} {player['Age']}\n"
+            counter += 1
+
+        msgBox = QMessageBox()
+        msgBox.setWindowTitle("Top Players")
+        msgBox.setText("Top Players (Name, Team, Age):\n" + top_players_info)
+        msgBox.exec()
+
         team = self.comboBox_4.currentText()
         #RANKS LIST = TEAM RANK FROM DICTIONARY, LIST OF FIVE "RANKS" WITH THAT NUMBER REPEATED
-        #mlp(PLAYERS INFO VARIABLE HERE, RANKS LIST HERE)
+        #mlp(top_players, RANKS LIST HERE, team, pos)
         #CALL SECOND MODEL AT THE END... SO CAN TEST OVERALL
 
     #RUN KNN MODEL, SEND TOP 5, TEST 25-50 TIMES PER POS
@@ -262,7 +309,7 @@ def preprocessing(df, name):
     name = "Preprocessed " + name
     df.to_csv(name, index=False, encoding='latin1')
 
-def mlp(testedPlayers, newRanks):
+def mlp(testedPlayers, newRanks, team, pos):
     df1 = pd.read_csv("Preprocessed 2021-2022 Football Player Stats.csv", encoding='latin1')
     df2 = pd.read_csv("Preprocessed 2022-2023 Football Player Stats.csv", encoding='latin1')
 
@@ -271,6 +318,7 @@ def mlp(testedPlayers, newRanks):
     common_players_df2 = df2[df2['Player'].isin(common_players)]
 
     x_train = common_players_df1.iloc[:, 5:].values
+    #IS THIS JUST GIVING RANKINGS?
     x_train = np.concatenate((x_train, common_players_df1['Rankings'].values.reshape(-1, 1)),
                        axis=1)
     y_train = common_players_df2['Rankings'].tolist()
@@ -295,6 +343,9 @@ def mlp(testedPlayers, newRanks):
 
     predictions = model.predict(x_test)
     print("Predictions:", predictions)
+
+    #TURN PREDICTION TO STATS LINE?
+    #PRINT PLAYERS AT SELECTED TEAM AT POS TO COMPARE SHORTLIST VS CURRENT PLAYERS
 
 if __name__ == "__main__":
     import sys

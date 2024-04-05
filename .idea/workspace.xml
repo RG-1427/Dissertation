@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="648c358f-de36-42f4-8f9f-f89cb92df6e2" name="Changes" comment="Second model created">
+    <list default="true" id="648c358f-de36-42f4-8f9f-f89cb92df6e2" name="Changes" comment="Second model training data set up">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
@@ -188,7 +188,15 @@
       <option name="project" value="LOCAL" />
       <updated>1711847455479</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="Second model training data set up">
+      <option name="closed" value="true" />
+      <created>1712226128661</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1712226128661</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -217,6 +225,7 @@
     <MESSAGE value="Database preprocessing finish, ready for model development" />
     <MESSAGE value="setup for kmeans model" />
     <MESSAGE value="Second model created" />
-    <option name="LAST_COMMIT_MESSAGE" value="Second model created" />
+    <MESSAGE value="Second model training data set up" />
+    <option name="LAST_COMMIT_MESSAGE" value="Second model training data set up" />
   </component>
 </project>
