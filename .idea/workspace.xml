@@ -4,8 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="648c358f-de36-42f4-8f9f-f89cb92df6e2" name="Changes" comment="Second model training data set up">
+    <list default="true" id="648c358f-de36-42f4-8f9f-f89cb92df6e2" name="Changes" comment="Model 1 finish">
+      <change beforePath="$PROJECT_DIR$/.idea/csv-editor.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/csv-editor.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Preprocessed 2021-2022 Football Player Stats.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Preprocessed 2022-2023 Football Player Stats.csv" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -196,7 +199,15 @@
       <option name="project" value="LOCAL" />
       <updated>1712226128661</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="Model 1 finish">
+      <option name="closed" value="true" />
+      <created>1712312719691</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1712312719691</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -226,6 +237,7 @@
     <MESSAGE value="setup for kmeans model" />
     <MESSAGE value="Second model created" />
     <MESSAGE value="Second model training data set up" />
-    <option name="LAST_COMMIT_MESSAGE" value="Second model training data set up" />
+    <MESSAGE value="Model 1 finish" />
+    <option name="LAST_COMMIT_MESSAGE" value="Model 1 finish" />
   </component>
 </project>

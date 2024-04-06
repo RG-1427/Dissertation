@@ -2,9 +2,7 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 from PyQt6.QtWidgets import QMessageBox
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
-from keras.models import Sequential
-from tensorflow.keras.layers import Dense
-import numpy as np
+from sklearn.neural_network import MLPRegressor
 
 
 class Ui_MainWindow(object):
@@ -154,17 +152,19 @@ class Ui_MainWindow(object):
         max_age = self.horizontalSlider.value()
         selected_position = self.comboBox_2.currentText()
         selected_playstyle = self.comboBox_3.currentText()
-        defender = ["Player", "Pos", "Squad", "Age", "Goals", "SoT%", "PasTotCmp%", "Assists", "ShoDist",
+        team = self.comboBox_4.currentText()
+        defender = ["Player", "Pos", "Squad", "Age", "Rankings", "Goals", "SoT%", "PasTotCmp%", "Assists", "ShoDist",
             "PasShoCmp%", "PasMedCmp%", "PasLonCmp%", "TI", "SCA", "GCA", "Blocks", "Int", "Clr", "Crs",
             "PasAss", "CrsPA", "PasCrs", "Tkl", "TklWon", "TklDri%", "Err", "Recov", "PKcon", "AerWon%"]
-        midfielder = ["Player", "Pos", "Squad", "Age", "Goals", "G/Sh", "SoT%", "PasTotCmp%", "Assists", "ShoDist",
+        midfielder = ["Player", "Pos", "Squad", "Age", "Rankings", "Goals", "G/Sh", "SoT%", "PasTotCmp%", "Assists", "ShoDist",
             "PasShoCmp%", "PasMedCmp%", "PasLonCmp%", "SCA", "GCA", "Blocks", "Int",
             "PasAss", "Pas3rd", "PPA", "Tkl", "TklWon", "TklDri%", "Recov", "PKcon", "CPA",
             "PKwon","Touches", "TouAtt3rd", "TouAttPen", "AerWon%"]
-        forward = ["Player", "Pos", "Squad", "Age", "Goals", "G/Sh", "SoT%", "PasTotCmp%", "Assists", "ShoDist",
+        forward = ["Player", "Pos", "Squad", "Age", "Rankings", "Goals", "G/Sh", "SoT%", "PasTotCmp%", "Assists", "ShoDist",
             "PasShoCmp%", "PasMedCmp%", "PasLonCmp%", "SCA", "GCA",  "Pas3rd", "PPA", "Crs", "PasAss",
             "CrsPA", "PasCrs", "PKwon", "CPA", "Touches", "TouAtt3rd", "TouAttPen", "AerWon%"]
         df = pd.read_csv("Preprocessed 2021-2022 Football Player Stats.csv", encoding='latin1')
+        df = df[(df['Squad'] != team)]
 
         if(selected_position == "CB" or selected_position == "LB/RB"):
             filtered_df = df[(df['Age'] <= max_age) & df['Pos'].str.contains("DF")]
@@ -180,12 +180,14 @@ class Ui_MainWindow(object):
             pos = "MF"
 
         if selected_position in ["CDM", "CM", "CAM/CF"]:
-            kmeans = KMeans(n_clusters=6, random_state=42)
+            kmeans = KMeans(n_clusters=6, random_state=35)
+        elif selected_position in ["CB", "LB/RB"]:
+            kmeans = KMeans(n_clusters=4, random_state=15)
         else:
-            kmeans = KMeans(n_clusters=4, random_state=42)
+            kmeans = KMeans(n_clusters=4, random_state=1)
 
-        player_info = x[['Player', 'Pos', 'Squad', "Age"]]
-        x = x.drop(['Player', 'Pos', 'Squad', "Age"], axis=1)
+        player_info = x[['Player', 'Pos', 'Squad', "Age", "Rankings"]]
+        x = x.drop(['Player', 'Pos', 'Squad', "Age", "Rankings"], axis=1)
         kmeans.fit(x)
         labels = kmeans.labels_
         x['Cluster'] = labels
@@ -202,56 +204,59 @@ class Ui_MainWindow(object):
             criteria = ["PasTotCmp%", "PasShoCmp%", "PasMedCmp%", "PasLonCmp%",
                 "Blocks", "Int", "Clr", "TklWon", "AerWon%"]
         elif selected_playstyle == "Central Defender":
-            cluster = 3
+            cluster = 2
             criteria = ["Blocks", "Int", "Clr", "TklWon", "AerWon%",
                 "PasTotCmp%", "PasShoCmp%", "PasMedCmp%", "PasLonCmp%"]
         elif selected_playstyle == "Fullback":
-            cluster = 2
+            cluster = 1
             criteria = ["Crs", "PasAss", "CrsPA", "PasCrs", "SCA", "GCA",
                 "Blocks", "Int", "Clr", "TklWon", "AerWon%", "TI"]
         elif selected_playstyle == "Wingback":
-            cluster = 1
-            criteria = ["Goals", "Assists", "SCA", "GCA", "Crs", "PasAss", "CrsPA", "PasCrs", "PPA",
+            cluster = 3
+            criteria = ["Goals", "Assists", "SCA", "GCA", "Crs", "PasAss", "CrsPA", "PasCrs",
                 "Blocks", "Int", "Clr", "TklWon", "TI"]
         elif selected_playstyle == "Deep Lying Playmaker":
-            cluster = 5
+            cluster = 0
             criteria = ["PasTotCmp%", "PasShoCmp%", "PasMedCmp%", "PasLonCmp%",
-                "Blocks", "Int", "Clr", "TklWon", "AerWon%"]
+                "Blocks", "Int", "TklWon", "AerWon%"]
         elif selected_playstyle == "Anchor":
-            cluster = 4
-            criteria = ["Blocks", "Int", "Clr", "TklWon", "AerWon%",
+            cluster = 5
+            criteria = ["Blocks", "Int", "TklWon", "AerWon%",
                 "PasTotCmp%", "PasShoCmp%", "PasMedCmp%", "PasLonCmp%"]
         elif selected_playstyle == "Box to Box":
-            cluster = 2
+            cluster = 4
             criteria = ["Goals", "PasTotCmp%", "Assists", "PasShoCmp%", "PasMedCmp%", "PasLonCmp%",
                 "SCA", "GCA", "Blocks", "Int", "PasAss", "PPA", "Tkl", "TklWon", "TklDri%", "Recov", "CPA"]
         elif selected_playstyle == "Playmaker":
-            cluster = 3
+            cluster = 1
             criteria = ["Goals", "PasTotCmp%", "Assists", "SCA", "GCA", "PasAss", "Pas3rd",
                 "PasShoCmp%", "PasMedCmp%", "PasLonCmp%"]
         elif selected_playstyle == "Advanced Playmaker":
-            cluster = 0
+            cluster = 2
             criteria = ["Assists", "SCA", "GCA", "PasAss", "Pas3rd", "Goals",
                 "PasShoCmp%", "PasMedCmp%", "PasLonCmp%", "PPA", "CPA"]
         elif selected_playstyle == "Shadow Striker":
-            cluster = 1
+            cluster = 3
             criteria = ["Goals", "SCA", "GCA", "Assists", "PasAss", "Pas3rd",
                 "PasShoCmp%", "PasMedCmp%", "PasLonCmp%", "PPA", "CPA"]
         elif selected_playstyle == "Inside Forward":
-            cluster = 3
-            criteria = ["Goals", "Assists", "SCA", "GCA", "PPA", "CPA", "PasAss", "Pas3rd"]
+            cluster = 0
+            criteria = ["PPA", "CPA", "SCA", "GCA", "Goals", "Assists", "PasAss", "Pas3rd"]
         elif selected_playstyle == "Wide Forward":
             cluster = 1
-            criteria = ["Goals", "Assists", "SCA", "GCA", "Crs", "PasAss", "CrsPA", "PasCrs", "PPA", "TouAtt3rd"]
+            criteria = ["CrsPA", "PasCrs", "PPA", "Goals", "Assists", "SCA", "GCA", "Crs", "PasAss", "TouAtt3rd"]
         elif selected_playstyle == "Target":
-            cluster = 2
-            criteria = ["Goals", "Assists", "SCA", "GCA", "PasAss", "TouAtt3rd", "TouAttPen", "AerWon%"]
+            cluster = 3
+            criteria = ["Goals", "Assists", "PasAss", "AerWon%", "SCA", "GCA", "TouAtt3rd", "TouAttPen"]
         else:
-            cluster = 0
-            criteria = ["Goals", "G/Sh", "SoT%", "SCA", "GCA", "Assists", "PasAss", "TouAtt3rd", "TouAttPen"]
+            cluster = 2
+            criteria = ["Goals", "G/Sh", "SoT%", "TouAtt3rd", "TouAttPen", "SCA", "GCA", "Assists", "PasAss"]
 
         cluster_df = combined_data[combined_data['Cluster'] == cluster]
         sorted_cluster_df = cluster_df.sort_values(by=criteria, ascending=False)
+        team_rank = uefa_rankings.get(team)
+        sorted_cluster_df['NewRanking'] = team_rank
+        sorted_cluster_df.rename(columns={'Rankings': 'OldRanking'}, inplace=True)
         top_players = sorted_cluster_df.head(5)
         top_players_info = ""
         counter = 1
@@ -264,13 +269,8 @@ class Ui_MainWindow(object):
         msgBox.setText("Top Players (Name, Team, Age):\n" + top_players_info)
         msgBox.exec()
 
-        team = self.comboBox_4.currentText()
-        #RANKS LIST = TEAM RANK FROM DICTIONARY, LIST OF FIVE "RANKS" WITH THAT NUMBER REPEATED
-        #mlp(top_players, RANKS LIST HERE, team, pos)
-        #CALL SECOND MODEL AT THE END... SO CAN TEST OVERALL
-
-    #RUN KNN MODEL, SEND TOP 5, TEST 25-50 TIMES PER POS
-    #RUN SECOND MODEL TO PREDICT DATA (AFTER TESTING SECOND MODEL WITH 50 - 100 TRANSFERS)
+        col = ['Player', 'Pos', 'Squad', "Age", "Rankings"] + criteria
+        #mlp(top_players, team, pos, col)
 
 def handling_missing_data(df):
     missing_data = df.isnull().sum()
@@ -282,7 +282,6 @@ def handling_missing_data(df):
 
 def preprocessing(df, name):
     handling_missing_data(df)
-
     columns = ["Player", "Pos", "Squad", "Age", "Min", "Goals", "SoT%", "G/Sh", "ShoDist",
     "PasTotCmp%", "PasShoCmp%", "PasMedCmp%", "PasLonCmp%", "Assists", "PasAss", "Pas3rd", "PPA", "CrsPA",
     "PasCrs", "TI", "SCA", "GCA", "Tkl", "TklWon", "TklDri%", "Blocks", "Int", "Clr",
@@ -309,43 +308,53 @@ def preprocessing(df, name):
     name = "Preprocessed " + name
     df.to_csv(name, index=False, encoding='latin1')
 
-def mlp(testedPlayers, newRanks, team, pos):
+def mlp(testedPlayers, team, pos, col):
     df1 = pd.read_csv("Preprocessed 2021-2022 Football Player Stats.csv", encoding='latin1')
     df2 = pd.read_csv("Preprocessed 2022-2023 Football Player Stats.csv", encoding='latin1')
 
     common_players = set(df1['Player']).intersection(set(df2['Player']))
-    common_players_df1 = df1[df1['Player'].isin(common_players)]
-    common_players_df2 = df2[df2['Player'].isin(common_players)]
+    common_players_df1 = df1[(df1['Player'].isin(common_players)) & (df1['Pos'].str.contains(pos))][col].drop_duplicates(subset=['Player'])
+    common_players_df2 = df2[(df2['Player'].isin(common_players)) & (df2['Pos'].str.contains(pos))][col].drop_duplicates(subset=['Player'])
+    common_players_df1 = common_players_df1.sort_values(by='Player')
+    common_players_df2 = common_players_df2.sort_values(by='Player')
+    common_players_df1 = common_players_df1.reset_index(drop=True)
+    common_players_df2 = common_players_df2.reset_index(drop=True)
+    common_players_df1.rename(columns={'Rankings': 'OldRanking'}, inplace=True)
+    common_players_df2.rename(columns={'Rankings': 'NewRanking'}, inplace=True)
+    oldTestedRanks = common_players_df1['OldRanking']
+    newTestedRanks = common_players_df2['NewRanking']
+    common_players_df1['NewRanking'] = newTestedRanks
+    common_players_df2['OldRanking'] = oldTestedRanks
 
-    x_train = common_players_df1.iloc[:, 5:].values
-    #IS THIS JUST GIVING RANKINGS?
-    x_train = np.concatenate((x_train, common_players_df1['Rankings'].values.reshape(-1, 1)),
-                       axis=1)
-    y_train = common_players_df2['Rankings'].tolist()
+    col.remove('Pos')
+    col.remove('Player')
+    col.remove('Squad')
+    col.remove('Age')
+    col.remove('Rankings')
+    col.append('OldRanking')
+    col.append('NewRanking')
 
-    x_test = testedPlayers.iloc[:, 5:].values
-    x_test = np.concatenate((x_test, testedPlayers['Rankings'].values.reshape(-1, 1)), axis=1)
 
-    y_test = newRanks
+    x_train = common_players_df1[col]
+    y_train = common_players_df2[col]
 
-    model = Sequential([
-        Dense(32, activation='relu'),
-        Dense(16, activation='relu'),
-        Dense(1)
-    ])
+    x_test = testedPlayers[col]
 
-    model.compile(optimizer='adam', loss='mean_squared_error')
+    model = MLPRegressor(hidden_layer_sizes=(100, 50), activation='relu', solver='adam', max_iter=1000, random_state=42)
+    model.fit(x_train, y_train)
+    print("Model Fitted")
 
-    model.fit(x_train, y_train, epochs=50, batch_size=32)
+    y_pred = model.predict(x_test)
+    print("Y Predicted")
 
-    mse = model.evaluate(x_test, y_test)
-    print("Mean Squared Error:", mse)
+    for i, player in enumerate(testedPlayers):
+        print("Player:", player)
+        print("Predicted New Statistics:", y_pred[i])
 
-    predictions = model.predict(x_test)
-    print("Predictions:", predictions)
+    team_stats = df1[(df1['Squad'] == team) & (df1['Pos'] == pos)]
+    print("Current Statistics for Players in {} playing {}:".format(team, pos))
+    print(team_stats)
 
-    #TURN PREDICTION TO STATS LINE?
-    #PRINT PLAYERS AT SELECTED TEAM AT POS TO COMPARE SHORTLIST VS CURRENT PLAYERS
 
 if __name__ == "__main__":
     import sys
