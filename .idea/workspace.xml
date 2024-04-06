@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="648c358f-de36-42f4-8f9f-f89cb92df6e2" name="Changes" comment="Model 1 finish">
+    <list default="true" id="648c358f-de36-42f4-8f9f-f89cb92df6e2" name="Changes" comment="Model 1 finalize">
       <change beforePath="$PROJECT_DIR$/.idea/csv-editor.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/csv-editor.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Preprocessed 2021-2022 Football Player Stats.csv" beforeDir="false" />
@@ -238,6 +238,7 @@
     <MESSAGE value="Second model created" />
     <MESSAGE value="Second model training data set up" />
     <MESSAGE value="Model 1 finish" />
-    <option name="LAST_COMMIT_MESSAGE" value="Model 1 finish" />
+    <MESSAGE value="Model 1 finalize" />
+    <option name="LAST_COMMIT_MESSAGE" value="Model 1 finalize" />
   </component>
 </project>
