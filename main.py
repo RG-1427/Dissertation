@@ -203,12 +203,12 @@ class Ui_MainWindow(object):
         defender = ["Player", "Pos", "Squad", "Age", "Rankings", "Goals", "SoT%", "PasTotCmp%", "Assists", "ShoDist",
             "PasShoCmp%", "PasMedCmp%", "PasLonCmp%", "TI", "SCA", "GCA", "Blocks", "Int", "Clr", "Crs",
             "PasAss", "CrsPA", "PasCrs", "Tkl", "TklWon", "TklDri%", "Err", "Recov", "PKcon", "AerWon%"]
-        midfielder = ["Player", "Pos", "Squad", "Age", "Rankings", "Goals", "G/Sh", "SoT%", "PasTotCmp%", "Assists", "ShoDist",
-            "PasShoCmp%", "PasMedCmp%", "PasLonCmp%", "SCA", "GCA", "Blocks", "Int",
+        midfielder = ["Player", "Pos", "Squad", "Age", "Rankings", "Goals", "G/Sh", "SoT%", "PasTotCmp%", "Assists",
+            "ShoDist", "PasShoCmp%", "PasMedCmp%", "PasLonCmp%", "SCA", "GCA", "Blocks", "Int",
             "PasAss", "Pas3rd", "PPA", "Tkl", "TklWon", "TklDri%", "Recov", "PKcon", "CPA",
             "PKwon","Touches", "TouAtt3rd", "TouAttPen", "AerWon%"]
-        forward = ["Player", "Pos", "Squad", "Age", "Rankings", "Goals", "G/Sh", "SoT%", "PasTotCmp%", "Assists", "ShoDist",
-            "PasShoCmp%", "PasMedCmp%", "PasLonCmp%", "SCA", "GCA",  "Pas3rd", "PPA", "Crs", "PasAss",
+        forward = ["Player", "Pos", "Squad", "Age", "Rankings", "Goals", "G/Sh", "SoT%", "PasTotCmp%", "Assists",
+            "ShoDist", "PasShoCmp%", "PasMedCmp%", "PasLonCmp%", "SCA", "GCA",  "Pas3rd", "PPA", "Crs", "PasAss",
             "CrsPA", "PasCrs", "PKwon", "CPA", "Touches", "TouAtt3rd", "TouAttPen", "AerWon%"]
 
         #Reading the preprocessed data, removing players in the same squad as the team of the user
