@@ -392,26 +392,39 @@ def mlp(tested_players, team, pos, col):
     col.remove('OldRanking')
     col.remove('NewRanking')
 
+    #Reading original data to remove data standardization
+    df = pd.read_csv("2021-2022 Football Player Stats.csv", encoding='latin1')
+
     #Creating the text of the 5 top players and their statistics
     text = "\nStatistics Predicted for top 5 Players\n"
     counter = 0
-    for i in range(0,5):
+    for i in range(0, 5):
         for column in col:
             if column in ['Player', 'Pos', 'Age']:
                 text += f"{column}: {tested_players[column].iloc[i]}, "
             else:
                 value = y_pred[i][counter]
+                value = value * df[column].std() + df[column].mean()
                 text += f"{column}: {value}, "
                 counter += 1
-        text += "\n"
         counter = 0
+        text += "\n"
 
     #Adding the text of the current players in that team for comparison
     team_stats = df1[(df1['Squad'] == team) & (df1['Pos'] == pos)]
     text += "\nCurrent Statistics for Players in {} playing {}:\n".format(team, pos)
     for i in range(len(team_stats)):
         for column in col:
-            text += f"{column}: {team_stats[column].iloc[i]}, "
+            if column in ['Player', 'Pos', 'Age']:
+                text += f"{column}: {team_stats[column].iloc[i]}, "
+            elif '%' in column:
+                value = team_stats[column].iloc[i]
+                value = value * 100
+                text += f"{column}: {value}, "
+            else:
+                value = team_stats[column].iloc[i]
+                value = value * df[column].std() + df[column].mean()
+                text += f"{column}: {value}, "
         text += "\n"
 
     #Displaying the results in the console
