@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="648c358f-de36-42f4-8f9f-f89cb92df6e2" name="Changes" comment="Finalize MLP">
+    <list default="true" id="648c358f-de36-42f4-8f9f-f89cb92df6e2" name="Changes" comment="Fixing cluster numbers">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
@@ -278,6 +278,7 @@
     <MESSAGE value="Model 1 finalize" />
     <MESSAGE value="Finish" />
     <MESSAGE value="Finalize MLP" />
-    <option name="LAST_COMMIT_MESSAGE" value="Finalize MLP" />
+    <MESSAGE value="Fixing cluster numbers" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixing cluster numbers" />
   </component>
 </project>

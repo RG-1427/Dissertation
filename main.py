@@ -279,11 +279,11 @@ class Ui_MainWindow(object):
             criteria = ["PasTotCmp%", "PasShoCmp%", "PasMedCmp%", "PasLonCmp%",
                 "Blocks", "Int", "TklWon", "AerWon%"]
         elif selected_playstyle == "Anchor":
-            cluster = 5
+            cluster = 4
             criteria = ["Blocks", "Int", "TklWon", "AerWon%",
                 "PasTotCmp%", "PasShoCmp%", "PasMedCmp%", "PasLonCmp%"]
         elif selected_playstyle == "Box to Box":
-            cluster = 4
+            cluster = 5
             criteria = ["Goals", "PasTotCmp%", "Assists", "PasShoCmp%", "PasMedCmp%", "PasLonCmp%",
                 "SCA", "GCA", "Blocks", "Int", "PasAss", "PPA", "Tkl", "TklWon", "TklDri%", "Recov", "CPA"]
         elif selected_playstyle == "Playmaker":
