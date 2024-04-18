@@ -259,7 +259,7 @@ class Ui_MainWindow(object):
         #Based on selected play style, pick the correct cluster and the criteria for the players
         #who best suit the play style
         if selected_playstyle == "Ball Playing":
-            cluster = 0
+            cluster = 3
             criteria = ["PasTotCmp%", "PasShoCmp%", "PasMedCmp%", "PasLonCmp%",
                 "Blocks", "Int", "Clr", "TklWon", "AerWon%"]
         elif selected_playstyle == "Central Defender":
@@ -271,7 +271,7 @@ class Ui_MainWindow(object):
             criteria = ["Crs", "PasAss", "CrsPA", "PasCrs", "SCA", "GCA",
                 "Blocks", "Int", "Clr", "TklWon", "AerWon%", "TI"]
         elif selected_playstyle == "Wingback":
-            cluster = 3
+            cluster = 0
             criteria = ["Goals", "Assists", "SCA", "GCA", "Crs", "PasAss", "CrsPA", "PasCrs",
                 "Blocks", "Int", "Clr", "TklWon", "TI"]
         elif selected_playstyle == "Deep Lying Playmaker":
@@ -320,7 +320,7 @@ class Ui_MainWindow(object):
         sorted_cluster_df['NewRanking'] = team_rank
         sorted_cluster_df.rename(columns={'Rankings': 'OldRanking'}, inplace=True)
 
-        #Generating the 5 top players by text
+        #Generating the top players by text
         top_players = sorted_cluster_df.head(5)
         top_players_info = ""
         counter = 1
