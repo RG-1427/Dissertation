@@ -280,7 +280,7 @@ class Ui_MainWindow(object):
                 "Blocks", "Int", "TklWon", "AerWon%"]
         elif selected_playstyle == "Anchor":
             cluster = 4
-            criteria = ["Blocks", "Int", "TklWon", "AerWon%",
+            criteria = ["TklWon", "Int", "Blocks", "AerWon%",
                 "PasTotCmp%", "PasShoCmp%", "PasMedCmp%", "PasLonCmp%"]
         elif selected_playstyle == "Box to Box":
             cluster = 5
